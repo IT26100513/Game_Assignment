@@ -1,0 +1,9 @@
+[R8] Player 1 : Treasures Found.
+[R8] Player 1 : Treasures Found.
+[R10] Player 1 : Key Found.
+[R11] Player 2 : Treasures Found.
+[R15] Player 1 : Door Unlocked.
+[R15] Player 2 : Treasures Found.
+[R16] Player 1 : Door Unlocked.
+[R17] Player 1 : Trap Triggered.
+[R18] Player 2 : Treasures Found.

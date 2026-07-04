@@ -16,6 +16,8 @@
 #define LOG_LENGTH 100
 #define LOG_DISPLAY 5
 
+#define MAX_PL 3
+
 char logs[MAX_LOGS][LOG_LENGTH];
 int logCount = 0;
 
@@ -45,10 +47,9 @@ int hiddenTrap[17][17];
 			    
 char arr[17][17];
 
-Player players[MAX_PLAYERS];
-Player playerssorted[MAX_PLAYERS];
+Player players[MAX_PL];
+Player playerssorted[MAX_PL];
 
-int playerCount;
 int roundNumber = 1;
 
 
@@ -226,12 +227,14 @@ void placePlayers(){
 }
 
 int isValidMove(int x, int y){
-	if(x<1 || x>=SIZE || y<1 || y>=SIZE){
+	if(x<1 || x>SIZE || y<1 || y>SIZE){
 		return 0;
 	}
 	if(arr[x][y]=='#'){
 		return 0;
 	}
+
+
 	return 1;
 }
 
@@ -263,10 +266,17 @@ void processTile(int index){
 	int r = players[index].row;
 	int c = players[index].col;
 
+	char msg[50];
+	char msg2[50];
+
 	if(hiddenTrap[r][c]){
 		players[index].health -= 20;
 		players[index].trapsTriggered++;
 		players[index].damageTaken += 20;
+
+		sprintf(msg, "%s %d %s", "Player", index+1, ": Trap Triggered.");
+		addLog(roundNumber, msg);
+
 	}
 
 	for(int i=0; i<HEALTH_PACKS; i++){
@@ -277,6 +287,10 @@ void processTile(int index){
 		case 'T' : players[index].treasuresFound++;
 			   players[index].score += 10;
 			   arr[r][c]=' ';
+
+				sprintf(msg2, "%s %d %s", "Player", index+1, ": Treasures Found.");
+				addLog(roundNumber, msg2);
+
 			   break;
 
 		case 'H' : 
@@ -287,18 +301,29 @@ void processTile(int index){
 
 				if(players[index].health>100)
 				players[index].health=100;
+
+				sprintf(msg2, "%s %d %s", "Player", index+1, ": Health Pack Found.");
+				addLog(roundNumber, msg2);
 			   	break;
 
 		case 'K' : 
 			   players[index].keysCollected++;
 			   players[index].keys++;
 			   arr[r][c]=' ';
+
+			   	sprintf(msg2, "%s %d %s", "Player", index+1, ": Key Found.");
+				addLog(roundNumber, msg2);
+
 			   break;
 
 		case 'D' : if(players[index].keys > 0){
 			   	players[index].keys--;
 				players[index].doorsUnlocked++;
 				arr[r][c]=' ';
+
+				sprintf(msg2, "%s %d %s", "Player", index+1, ": Door Unlocked.");
+				addLog(roundNumber, msg2);
+
 			   }else{
 				printf("\nPlayer needs a key !");
 			   }
@@ -317,7 +342,7 @@ void movePlayer(int index){
 		return;
 	}
 
-	for(int i=0; i<4; i++){
+	for(int i=0; i<strlen(moves); i++){
 		char move = toupper(moves[i]);
 
 		int nrow = players[index].row;
@@ -436,7 +461,7 @@ void saveGame(){
 
     fwrite(&MAX_PLAYERS, sizeof(int), 1, fp);
 
-    fwrite(players, sizeof(Player), playerCount, fp);
+    fwrite(players, sizeof(Player), MAX_PLAYERS, fp);
 
     fwrite(arr, sizeof(arr), 1, fp);
 
@@ -466,7 +491,7 @@ int remainingTreasures(){
 
 void showStats(){
 	for(int i=0; i<MAX_PLAYERS; i++){
-		printf("\n==========Player %d : Statistics==========", i);
+		printf("\n==========Player %d : Statistics==========", i+1);
 		printf("\n # Moves Made: %d", players[i].movesMade);
 		printf("\n # treasures Found: %d", players[i].treasuresFound);
 		printf("\n # Traps Triggered: %d", players[i].trapsTriggered);
@@ -474,6 +499,7 @@ void showStats(){
 		printf("\n # Health Packs Used: %d", players[i].healthPacksUsed);
 		printf("\n # Keys Collected: %d", players[i].keysCollected);
 		printf("\n # Doors Unlocked: %d", players[i].doorsUnlocked);
+		printf("\n");
 
 	}
 
@@ -503,7 +529,7 @@ void saveLog()
 
 void gameLoop(){
     while (1){
-		printf("\nRound Number : %d", roundNumber);
+		printf("\nRound Number : %d\n", roundNumber);
         printMap();
 
 		printf("\n");
@@ -550,7 +576,7 @@ int main(){
     srand(time(NULL));
 
     printf("=====================================\n");
-    printf("   SEEK FOR THE LOST TREASURE\n");
+    printf("     SEEK FOR THE LOST TREASURE\n");
     printf("=====================================\n");
 
     printf("1. New Game\n");
