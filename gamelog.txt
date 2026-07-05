@@ -1,17 +1,20 @@
-[R1] Player 1 : Trap Triggered.
 [R1] Player 1 : Treasures Found.
-[R1] Player 1 : Treasures Found.
+[R1] Player 1 : Health Pack Found.
+[R1] Player 1 : Key Found.
 [R1] Player 2 : Treasures Found.
-[R1] Player 2 : Health Pack Found.
-[R2] Player 1 : Treasures Found.
-[R2] Player 1 : Treasures Found.
 [R2] Player 1 : Treasures Found.
 [R2] Player 2 : Key Found.
-[R2] Player 2 : Door Unlocked.
-[R3] Player 1 : Trap Triggered.
 [R3] Player 1 : Treasures Found.
-[R3] Player 2 : Treasures Found.
-[R3] Player 3 : Treasures Found.
-[R3] Player 3 : Treasures Found.
-[R4] Player 1 : Treasures Found.
-[R4] Player 3 : Treasures Found.
+[R3] Player 1 : Treasures Found.
+[R3] Player 2 : Health Pack Found.
+[R3] Player 2 : Door Unlocked.
+[R4] Player 1 : Trap Triggered.
+[R4] Player 1 : Key Found.
+[R4] Player 2 : Treasures Found.
+[R5] Player 1 : Treasures Found.
+[R5] Player 2 : Treasures Found.
+[R6] Player 1 : Treasures Found.
+[R6] Player 2 : Trap Triggered.
+[R7] Player 1 : Treasures Found.
+[R7] Player 1 : Treasures Found.
+[R8] Player 1 : Treasures Found.

@@ -254,6 +254,11 @@ int isValidMove(int x, int y){
 	if(arr[x][y]=='#'){
 		return 0;
 	}
+	for(int i=0; i<MAX_PLAYERS; i++){
+		if(players[i].row == x && players[i].col == y && players[i].health > 0){
+			return 0;
+		}
+	}
 	return 1;
 }
 
@@ -307,6 +312,8 @@ void processTile(int index){
 
 	//According to the user input, processing the tile
 	switch(toupper(arr[r][c])){
+
+		//When input is T
 		case 'T' : 
 			players[index].treasuresFound++;
 			players[index].score += 10;
@@ -316,7 +323,8 @@ void processTile(int index){
 			addLog(roundNumber, msg2);
 
 			break;
-
+		
+		//When input is H
 		case 'H' : 
 			players[index].healthPacksUsed++;
 			players[index].health += 20;
@@ -330,6 +338,7 @@ void processTile(int index){
 			addLog(roundNumber, msg2);
 			break;
 
+		//When input is K
 		case 'K' : 
 			players[index].keysCollected++;
 			players[index].keys++;
@@ -340,6 +349,7 @@ void processTile(int index){
 
 			   break;
 
+		//When input is D
 		case 'D' : if(players[index].keys > 0){
 			   	players[index].keys--;
 				players[index].doorsUnlocked++;
@@ -353,6 +363,14 @@ void processTile(int index){
 			   }
 			   break;
 	}
+}
+
+//This function initialized by me because the door should be unlocked before move. Otherwise can't move through a door.
+int doorCheck(int x, int y, int index){
+	if(arr[x][y]=='D' && players[index].keys == 0){
+		return 0;
+	}
+	return 1;
 }
 
 //Moving the player
@@ -389,8 +407,8 @@ void movePlayer(int index){
 				   continue;
 		}
 
-		//Validate the move
-		if(isValidMove(nrow, ncol)){
+		//Validate the move and update the current position
+		if(isValidMove(nrow, ncol) && doorCheck(nrow, ncol, index)){
 
 			players[index].row = nrow;
 			players[index].col = ncol;
@@ -399,7 +417,8 @@ void movePlayer(int index){
 			processTile(index);
 
 		}else{
-			printf("\nMove Blocked.\n");
+			printf("\nMove Blocked !\n");
+			return;
 		}
 	}
 }
@@ -437,6 +456,7 @@ void showScores(){
 		printf("%d. %s\n", i + 1, playerssorted[i].name);
         printf("   Score : %d\n", playerssorted[i].score);
         printf("   Health: %d\n", playerssorted[i].health);
+		printf("\n");
 	}
 
 	if(playerssorted[0].score == playerssorted[1].score){
@@ -529,7 +549,7 @@ int remainingTreasures(){
 //Showing Statistics of the players
 void showStats(){
 	for(int i=0; i<MAX_PLAYERS; i++){
-		printf("\n==========Player %d : %s Statistics==========", i+1, players[i].name);
+		printf("\n-------------Player %d : %s's Statistics-------------", i+1, players[i].name);
 		printf("\n # Moves Made: %d", players[i].movesMade);
 		printf("\n # Treasures Found: %d", players[i].treasuresFound);
 		printf("\n # Traps Triggered: %d", players[i].trapsTriggered);
@@ -655,5 +675,5 @@ int main(){
 
 // IT26100513
 // Samaranayake T. D. T. N
-// Department of Computer Science, Faculty of Computing
+// Department of Computer Science | Faculty of Computing
 // Sri Lanka Institute of Information Technology
